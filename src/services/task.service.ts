@@ -1,14 +1,20 @@
 import { prisma } from '../utils/prisma';
 import { CreateTaskDto } from '../models/task.types';
+import { taskProcessor } from './task.processor';
 
 export class TaskService {
   async createTask(data: CreateTaskDto) {
-    return prisma.task.create({
+    const task = await prisma.task.create({
       data: {
         ...data,
         status: 'pending',
       },
     });
+
+    // async proc
+    taskProcessor.processTask(task.id);
+
+    return task;
   }
 
   async getAllTasks() {
