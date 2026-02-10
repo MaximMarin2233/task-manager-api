@@ -11,16 +11,17 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server, {
-  cors: { origin: '*' },
+  cors: { origin: '*' }, // allow req from all
 });
 
 const PORT = process.env.PORT || 3000;
 
 // middleware 
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // allow cors
+app.use(express.json()); // json parse
 
-app.use(express.static('public'));
+// static files
+app.use(express.static('public')); // frontend WS
 
 // routes
 app.use('/tasks', taskRoutes);
@@ -30,6 +31,7 @@ io.on('connection', (socket) => {
   console.log('Client connected', socket.id);
 });
 
+// watch tasks / send to clients
 taskEvents.on('task:queued', (id) => io.emit('task:queued', { id }));
 taskEvents.on('task:processing', (id) => io.emit('task:processing', { id }));
 taskEvents.on('task:completed', (id) => io.emit('task:completed', { id }));

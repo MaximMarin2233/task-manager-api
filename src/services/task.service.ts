@@ -32,19 +32,21 @@ export class TaskService {
     return task;
   }
 
-
+  // get all tasks from the database
   async getAllTasks() {
     return prisma.task.findMany({
       orderBy: { createdAt: 'desc' },
     });
   }
 
+  // get current task by id
   async getTaskById(id: number) {
     return prisma.task.findUnique({
       where: { id },
     });
   }
 
+  // update current task by id
   async updateTask(id: number, data: Partial<CreateTaskDto>) {
     return prisma.task.update({
       where: { id },
@@ -52,6 +54,7 @@ export class TaskService {
     });
   }
 
+  // delete current task by id
   async deleteTask(id: number) {
     return prisma.task.delete({
       where: { id },
