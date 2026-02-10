@@ -1,8 +1,23 @@
 import { prisma } from '../utils/prisma';
 import { CreateTaskDto } from '../models/task.types';
-import { taskProcessor } from './task.processor';
+// import { taskProcessor } from './task.processor'; // for async proc
+import { taskQueue } from './task.queue';
 
 export class TaskService {
+  // async createTask(data: CreateTaskDto) {
+  //   const task = await prisma.task.create({
+  //     data: {
+  //       ...data,
+  //       status: 'pending',
+  //     },
+  //   });
+
+  //   // async proc
+  //   taskProcessor.processTask(task.id);
+
+  //   return task;
+  // }
+
   async createTask(data: CreateTaskDto) {
     const task = await prisma.task.create({
       data: {
@@ -11,11 +26,12 @@ export class TaskService {
       },
     });
 
-    // async proc
-    taskProcessor.processTask(task.id);
+    // queue
+    taskQueue.add({ id: task.id });
 
     return task;
   }
+
 
   async getAllTasks() {
     return prisma.task.findMany({
