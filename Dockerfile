@@ -12,6 +12,9 @@ RUN npm install
 # Copy all files
 COPY . .
 
+# Генерируем Prisma Client внутри контейнера
+RUN npx prisma generate
+
 # Build TypeScript
 RUN npm run build
 
