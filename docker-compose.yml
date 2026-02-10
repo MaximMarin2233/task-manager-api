@@ -14,5 +14,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  api:
+    build: .
+    container_name: task_manager_api
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://admin:admin@postgres:5432/task_manager
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
 volumes:
   postgres_data:

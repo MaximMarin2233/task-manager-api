@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Task WS</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+  <h1>Task Status (only realtime changing)</h1>
+  <ul id="tasks"></ul>
+
+  <script>
+    const socket = io('http://localhost:3000');
+
+    socket.on('task:queued', data => {
+      const li = document.createElement('li');
+      li.textContent = `Task ${data.id} queued`;
+      document.getElementById('tasks').appendChild(li);
+    });
+
+    socket.on('task:processing', data => {
+      const li = document.createElement('li');
+      li.textContent = `Task ${data.id} processing`;
+      document.getElementById('tasks').appendChild(li);
+    });
+
+    socket.on('task:completed', data => {
+      const li = document.createElement('li');
+      li.textContent = `Task ${data.id} completed`;
+      document.getElementById('tasks').appendChild(li);
+    });
+
+    socket.on('task:failed', data => {
+      const li = document.createElement('li');
+      li.textContent = `Task ${data.id} failed`;
+      document.getElementById('tasks').appendChild(li);
+    });
+  </script>
+</body>
+
+</html>
