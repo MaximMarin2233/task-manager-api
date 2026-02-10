@@ -1,0 +1,18 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  type        String
+  payload     Json
+  status      String
+  priority    Int
+  createdAt   DateTime @default(now())
+  processedAt DateTime?
+  result      Json?
+}
